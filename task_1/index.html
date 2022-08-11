@@ -1,0 +1,102 @@
+ 
+<!DOCTYPE html>
+<html>
+ <head>
+   <title>!DOCTYPE</title>
+   <meta charset="utf-8">
+ </head>
+ <body>
+ 
+	 <!--
+
+	Мы хотим, чтобы Вы создали систему анализ и сравнение текстов на PHP:
+
+	Текстовое поле, где пользователь вводит первую версию текста.
+	Текстовое поле, где пользователь вводит вторую версию текста.
+
+	Кнопка “Сравнить”
+
+	При нажатии кнопку появляется вторая версия текста с изменениями относительно первого текста.
+
+
+	- Новые предложения должны быть выделены светло-зеленым цветом.
+	- Измененные предложения должны быть выделены желтым цветом.
+	- Удаленные предложения должны быть выделены красным цветом.
+	- При наведении курсора мыши на измененное (желтое) предложение оно должно заменяться на первую версию 
+	 (при пропадании фокуса с измененного предложения опять видна новая версия).
+
+	 -->
+
+	<p> <textarea cols="80" rows="10" id="text_1">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur convallis lacus vel enim efficitur. Vivamus ultrices faucibus ante at blandit. Sed neque diam, gravida maximus nunc.</textarea> </p>
+	<p> <textarea cols="80" rows="10" id="text_2">Lorem ipsum dolor sit amet, consectetur adipiscing. Vivamus ultrices faucibus ante at blandit. Sed neque diam, gravida maximus nunc. New string in text. </textarea> </p>
+	<p> <button type="button" id="btn">Compare</button> </p>
+
+	<br><br>
+	<div id="result"></div>
+
+	<style>
+
+	 .second-version{
+		 display:none;
+	 }
+	 
+	 .created{
+		 background-color:green;
+		 color:white;
+	 }
+	 
+	 .deleted{
+		 background-color:red;
+		 color:white;
+	 }
+	 
+	 .changed_version{
+		 background-color:yellow;
+			 
+	 }
+	 
+	 .before-changed{
+		 display:none;
+	 }
+	 
+
+	</style>
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+	<script>
+
+	 $("#btn").click(function(){
+		 
+		var dataSend = {};
+
+		dataSend['text_1'] = $('#text_1').val();
+		dataSend['text_2'] = $('#text_2').val();
+
+		$.post("/task_1/action.php", dataSend, function(data){
+
+			 $("#result").html(data);		
+		}) 	 
+	 });
+	 
+	 
+	 $("#result").on('mouseenter', '.changed_version',  function(){ 
+		 
+		 var id = $(this).data('id');
+		 $("#first-version-" + id).show();
+		 $(this).hide();
+	 });
+	 
+	  $("#result").on('mouseleave', '.before-changed',  function(){ 
+		 
+		 var id = $(this).data('id');
+		 $("#second-version-" + id).show();
+		 $(this).hide();
+	 });
+	 
+	</script>
+
+
+
+ </body> 
+</html>
